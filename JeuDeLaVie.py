@@ -7,23 +7,23 @@ import tkinter as tk
 
 """variables"""
 #Constante
-lignes = 30 # Nombre de ligne dans la matrice
-colonnes = 30 # Nombre de colonne dans la matrice
-nbCels = 100 # Nombre de cellule initiales
+lignes = 10 # Nombre de ligne dans la matrice
+colonnes = 10 # Nombre de colonne dans la matrice
+nbCels = 33 # Nombre de cellule initiales
 
-nbTour = 1000 # Nombre de tour
+nbTour = 100 # Nombre de tour
 
 sleep = 0.1 # Temps de latence du rafraîchissement (en seconde)
 
 
 matrice = []
 
-k = nbCels
+k = nbCels 
 c = 0
 
 # Variable Canvas
-longeurCanvas = 600 # Longeur du canvas
-largeurCanvas = 600 # Hauteur du canvas
+longeurCanvas = 800 # Longeur du canvas
+largeurCanvas = 800 # Hauteur du canvas
 
 
 lo = (longeurCanvas/colonnes) # Longeur d'une case
@@ -39,24 +39,24 @@ matriceDraw = []
 def comptCellAround(m, x, y):
     # Compte le nombre de cellule adjacente
     c = 0
-    for i in [[x-1, y-1], [x, y-1], [x+1, y-1],
+    for i in [[x-1, y-1], [x, y-1], [x+1, y-1], 
               [x-1, y], [x+1, y],
               [x-1, y+1], [x, y+1], [x+1, y+1]]:
         if((0 < i[0] < len(m[0])) and (0 < i[1] < len(m))):
             if(m[i[1]][i[0]] == 1):
                 c += 1
     return c
-
+    
 def verifCrea(m, x, y):
     # Vérifie si il faut créer une cellule en coordonées x, y
     f = False
     c = comptCellAround(m, x, y)
-
+    
     if c >= 3:
         f = True
-
+    
     return f
-
+    
 def verifSuppr(m, x, y):
     # Vérifie si il faut détruire une cellule en coordonées x, y
     f = False
@@ -65,11 +65,11 @@ def verifSuppr(m, x, y):
         f = True
     elif c >= 4:
         f = True
-
+    
     return f
 
 def majMatrice(matrice):
-    # Rafraîchit les donnée de la matrice
+    # Rafraîchit les donnée de la matrice 
     chang = []
     for i in range(len(matrice)):
         for j in range(len(matrice[i])):
@@ -79,7 +79,7 @@ def majMatrice(matrice):
             else:
                 if(verifSuppr(matrice, j, i)):
                     chang.append([i,j])
-
+    
     for i in chang:
         if matrice[i[0]][i[1]] == 0:
             matrice[i[0]][i[1]] = 1
@@ -98,14 +98,14 @@ def majMatriceDraw(matrice, matriceDraw):
 def affichageMatrice(matrice):
     # Affiche la matrice dans la console
     print("\033[H\033[J")# Clear console
-
+    
     for i in range(len(matrice[0])):
         for j in range(len(matrice)):
             print(matrice[j][i], end=" ")
         print()
     print("\n")
 
-
+    
 def comptCels(matrice):
     c = 0
     for i in range(len(matrice)):
@@ -124,22 +124,22 @@ def maj():
     global sleep
     global nbTour
     global c
-
+    
     c += 1
     compteur['text'] = str(c)+" /"+str(nbTour)
     compteurCels['text'] = "Nb cell: " + str(comptCels(matrice))
-
+    
     # Maj Matrice
     majMatrice(matrice)
     # Maj Matrice Draw
     majMatriceDraw(matrice, matriceDraw)
     # Affichage de la matrice
     #affichageMatrice(matrice)
-
+    
     if( c < nbTour):
-        fenetre.after(int(sleep*1000), start)
+        fenetre.after(int(sleep*1000), maj)
 
-
+    
 
 """main"""
 # Initialisation de la matrice
@@ -148,8 +148,8 @@ for i in range(colonnes):
     matrice.append([])
     for j in range(lignes):
         matrice[i].append(0)
-
-# Generation des cellules
+    
+# Generation des cellules 
 while k > 0:
     i = random.randint(0, colonnes-1)
     j = random.randint(0, lignes-1)
@@ -157,7 +157,7 @@ while k > 0:
         matrice[i][j] = 1
         k -= 1
 
-
+        
 # Initialisation matrice affichage
 for i in range(colonnes):
     matriceDraw.append([])
@@ -173,7 +173,7 @@ for i in range(colonnes):
 majMatriceDraw(matrice, matriceDraw)
 #affichageMatrice(matrice)
 
-buttonStart = tk.Button(fenetre, text='start', command=maj)
+buttonStart = tk.Button(fenetre, text='start', command=start)
 compteur = tk.Label(fenetre, text=str(c)+" /"+str(nbTour))
 compteurCels = tk.Label(fenetre, text="Nb cell: " + str(comptCels(matrice)))
 
@@ -183,3 +183,6 @@ compteurCels.pack()
 canvas.pack()
 
 fenetre.mainloop()
+
+
+
